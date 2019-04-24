@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="说明1：安装账号为root账号2：根据官网文档，一些此处不需要的步骤就没有添加3：安装系统：centos7 准备卸载旧版本1$ yum remove docker docker-common docker-selinux docker-engine 如果 yum 报告未安装任何这些软件包，这表示情况正常 安装设置镜像仓库1.安装所需的软件包1$ yum install -y yum-utils d">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-24T01:46:51.225Z">
+<meta property="og:updated_time" content="2019-04-24T02:43:58.930Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker安装">
 <meta name="twitter:description" content="说明1：安装账号为root账号2：根据官网文档，一些此处不需要的步骤就没有添加3：安装系统：centos7 准备卸载旧版本1$ yum remove docker docker-common docker-selinux docker-engine 如果 yum 报告未安装任何这些软件包，这表示情况正常 安装设置镜像仓库1.安装所需的软件包1$ yum install -y yum-utils d">
@@ -317,7 +317,9 @@
 <p>关闭<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl stop  docker</span><br><span class="line">或者</span><br><span class="line">$ service docker stop</span><br></pre></td></tr></table></figure></p>
 <h2 id="将-Docker-配置为在系统启动时启动"><a href="#将-Docker-配置为在系统启动时启动" class="headerlink" title="将 Docker 配置为在系统启动时启动"></a>将 Docker 配置为在系统启动时启动</h2><p>centos使用<code>systemd</code>来管理在系统启动时启动的服务。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl enable docker</span><br></pre></td></tr></table></figure></p>
 <p>若需要禁止在系统启动时启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl disable docker</span><br></pre></td></tr></table></figure></p>
-<h2 id="配置国内镜像仓库"><a href="#配置国内镜像仓库" class="headerlink" title="配置国内镜像仓库"></a>配置国内镜像仓库</h2><p>在 /etc/docker/daemon.json 中添加<code>”registry-mirrors”: [“https://registry.docker-cn.com“]</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/docker/daemon.json </span><br><span class="line">&#123; </span><br><span class="line">“registry-mirrors”: [“https://registry.docker-cn.com“] </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="配置国内镜像仓库"><a href="#配置国内镜像仓库" class="headerlink" title="配置国内镜像仓库"></a>配置国内镜像仓库</h2><p>在 /etc/docker/daemon.json 中添加<code>registry-mirrors</code><br>Docker 官方中国区(ping不通)<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://registry.docker-cn.com</span><br></pre></td></tr></table></figure></p>
+<p>网易<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://hub-mirror.c.163.com</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/docker/daemon.json </span><br><span class="line">&#123; </span><br><span class="line">“registry-mirrors”: [“https://registry.docker-cn.com“] </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
