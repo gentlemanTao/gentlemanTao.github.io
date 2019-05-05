@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Docker组件Docker客户端和服务器&amp;emsp;&amp;emsp;Docker是一个客户端/服务器(C/S)的架构。Docker客户端只需要向docker服务器或守护进程发出请求，服务器或守护进程将完成所有工作并返回结果。Docker守护进程有时被称为Docker引擎。Docker提供了命令行工具docker和一整套RESTfulAPI来与守护进程交互。用户可以在一台宿主机同时运行Docker守护">
+<meta name="description" content="数据管理docker使用数据卷和挂载主机目录来让容器使用主机的文件目录。数据卷需要提前创建，文件目录是确定的。挂载主机目录可以挂在多个主机目录，源路径必须使用宿主机的绝对路径。 数据卷&amp;emsp;&amp;emsp;数据卷 是被设计用来持久化数据的，它的生命周期独立于容器，Docker不会在容器被删除后自动删除 数据卷，并且也不存在垃圾回收这样的机制来处理没有任何容器引用的 数据卷。如果需要在删除容器的同">
 <meta name="keywords" content="docker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="docker相关概念">
-<meta property="og:url" content="http://yoursite.com/2019/04/24/docker相关概念/index.html">
+<meta property="og:title" content="docker数据管理">
+<meta property="og:url" content="http://yoursite.com/2019/05/05/docker数据管理/index.html">
 <meta property="og:site_name" content="Gentleman">
-<meta property="og:description" content="Docker组件Docker客户端和服务器&amp;emsp;&amp;emsp;Docker是一个客户端/服务器(C/S)的架构。Docker客户端只需要向docker服务器或守护进程发出请求，服务器或守护进程将完成所有工作并返回结果。Docker守护进程有时被称为Docker引擎。Docker提供了命令行工具docker和一整套RESTfulAPI来与守护进程交互。用户可以在一台宿主机同时运行Docker守护">
+<meta property="og:description" content="数据管理docker使用数据卷和挂载主机目录来让容器使用主机的文件目录。数据卷需要提前创建，文件目录是确定的。挂载主机目录可以挂在多个主机目录，源路径必须使用宿主机的绝对路径。 数据卷&amp;emsp;&amp;emsp;数据卷 是被设计用来持久化数据的，它的生命周期独立于容器，Docker不会在容器被删除后自动删除 数据卷，并且也不存在垃圾回收这样的机制来处理没有任何容器引用的 数据卷。如果需要在删除容器的同">
 <meta property="og:locale" content="java">
-<meta property="og:updated_time" content="2019-04-24T01:49:48.601Z">
+<meta property="og:updated_time" content="2019-05-05T09:55:44.672Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="docker相关概念">
-<meta name="twitter:description" content="Docker组件Docker客户端和服务器&amp;emsp;&amp;emsp;Docker是一个客户端/服务器(C/S)的架构。Docker客户端只需要向docker服务器或守护进程发出请求，服务器或守护进程将完成所有工作并返回结果。Docker守护进程有时被称为Docker引擎。Docker提供了命令行工具docker和一整套RESTfulAPI来与守护进程交互。用户可以在一台宿主机同时运行Docker守护">
+<meta name="twitter:title" content="docker数据管理">
+<meta name="twitter:description" content="数据管理docker使用数据卷和挂载主机目录来让容器使用主机的文件目录。数据卷需要提前创建，文件目录是确定的。挂载主机目录可以挂在多个主机目录，源路径必须使用宿主机的绝对路径。 数据卷&amp;emsp;&amp;emsp;数据卷 是被设计用来持久化数据的，它的生命周期独立于容器，Docker不会在容器被删除后自动删除 数据卷，并且也不存在垃圾回收这样的机制来处理没有任何容器引用的 数据卷。如果需要在删除容器的同">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/24/docker相关概念/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/05/docker数据管理/">
 
 
 
 
 
-  <title>docker相关概念 | Gentleman</title>
+  <title>docker数据管理 | Gentleman</title>
   
 
 
@@ -233,7 +233,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/24/docker相关概念/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/05/docker数据管理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="gentlema">
@@ -250,7 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">docker相关概念</h1>
+          <h1 class="post-title" itemprop="name headline">docker数据管理</h1>
         
 
         <div class="post-meta">
@@ -262,8 +262,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-24T09:48:20+08:00">
-                2019-04-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-05T17:55:09+08:00">
+                2019-05-05
               </time>
             
 
@@ -300,11 +300,24 @@
       
 
       
-        <h1 id="Docker组件"><a href="#Docker组件" class="headerlink" title="Docker组件"></a>Docker组件</h1><h2 id="Docker客户端和服务器"><a href="#Docker客户端和服务器" class="headerlink" title="Docker客户端和服务器"></a>Docker客户端和服务器</h2><p>&emsp;&emsp;Docker是一个客户端/服务器(C/S)的架构。Docker客户端只需要向docker服务器或守护进程发出请求，服务器或守护进程将完成所有工作并返回结果。Docker守护进程有时被称为Docker引擎。Docker提供了命令行工具docker和一整套RESTfulAPI来与守护进程交互。用户可以在一台宿主机同时运行Docker守护进程和客户端，也可以使用客户端与另一台宿主机的Docker守护进程进行交互。</p>
-<h2 id="Docker镜像（Image）"><a href="#Docker镜像（Image）" class="headerlink" title="Docker镜像（Image）"></a>Docker镜像（Image）</h2><p>&emsp;&emsp;镜像处于Docker生命周期的“构建部分”。Docker 镜像是一个特殊的文件系统。操作系统分为内核和用户空间。对于 Linux 而言，内核启动后，会挂载<code>root</code> 文件系统为其提供用户空间支持。而 Docker 镜像（Image），就相当于是一个 <code>root</code> 文件系统。Docker除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。镜像不包含任何动态数据，其内容在构建之后也不会被改变。可以把镜像理解为容器的“源代码”，可以分享、存储和更新。</p>
-<h3 id="分层存储"><a href="#分层存储" class="headerlink" title="分层存储"></a>分层存储</h3><p>&emsp;&emsp;镜像是基于联合文件系统的一种层式的结构，由一系列指令一步步构建出来。镜像构建时，会一层层构建，前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。<br>&emsp;&emsp;分层存储的特征还使得镜像的复用、定制变的更为容易。甚至可以用之前构建好的镜像作为基础层，然后进一步添加新的层，以定制自己所需的内容，构建新的镜像。</p>
-<h2 id="容器（Container）"><a href="#容器（Container）" class="headerlink" title="容器（Container）"></a>容器（Container）</h2><p>&emsp;&emsp;容器的实质是进程，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的 命名空间。因此容器可以拥有自己的 <code>root</code> 文件系统、自己的网络配置、自己的进程空间，甚至自己的用户 ID 空间。容器内的进程是运行在一个隔离的环境里，使用起来，就好像是在一个独立于宿主的系统下操作一样。<br>&emsp;&emsp;每一个容器运行时，是以镜像为基础层，在其上创建一个当前容器的存储层，我们可以称这个为容器运行时读写而准备的存储层为 <strong><strong>容器存储层</strong></strong>。<br>&emsp;&emsp;容器存储层的生存周期和容器保持一致。当容器消亡时，容器存储层也随之消亡，存储在容器存储层的信息也会随容器被删除而丢失。</p>
-<h2 id="仓库（Registry）"><a href="#仓库（Registry）" class="headerlink" title="仓库（Registry）"></a>仓库（Registry）</h2><p>&emsp;&emsp;Dcoker用Registry用来保存用户构建的镜像。Registry分为公有和私有两种。Docker运营的公共Registry为DockerHub。</p>
+        <h1 id="数据管理"><a href="#数据管理" class="headerlink" title="数据管理"></a>数据管理</h1><p>docker使用数据卷和挂载主机目录来让容器使用主机的文件目录。数据卷需要提前创建，文件目录是确定的。挂载主机目录可以挂在多个主机目录，源路径必须使用宿主机的绝对路径。</p>
+<h2 id="数据卷"><a href="#数据卷" class="headerlink" title="数据卷"></a>数据卷</h2><p>&emsp;&emsp;<code>数据卷</code> 是被设计用来持久化数据的，它的生命周期独立于容器<code>，Docker</code>不会在容器被删除后自动删除 数据卷，并且也不存在垃圾回收这样的机制来处理没有任何容器引用的 数据卷。如果需要在删除容器的同时移除数据卷。可以在删除容器的时候使用<code>docker rm -v</code>这个命令。</p>
+<ul>
+<li><code>数据卷</code>是一个可供一个或多个容器使用的特殊目录，它绕过 UFS，可以提供很多有用的特性。</li>
+<li><code>数据卷</code>可以在容器之间共享和重用。</li>
+<li>对<code>数据卷</code>的修改会立马生效</li>
+<li>对<code>数据卷</code>的更新，不会影响镜像</li>
+<li><code>数据卷</code>默认会一直存在，即使容器被删除</li>
+</ul>
+<p><strong>创建数据卷</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker volume tomcatwebapp</span><br></pre></td></tr></table></figure></p>
+<p><strong>查看所有的数据卷</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker volume ls</span><br><span class="line">local    tomcatwebapp</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用<code>docker volume inspect</code>或<code>docker  inspect</code>查看指定数据卷的信息</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">$ docker volume inspect tomcatwebapp</span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;CreatedAt&quot;: &quot;2019-05-05T15:03:29+08:00&quot;,</span><br><span class="line">        &quot;Driver&quot;: &quot;local&quot;,</span><br><span class="line">        &quot;Labels&quot;: &#123;&#125;,</span><br><span class="line">        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/tomcatwebapp/_data&quot;,</span><br><span class="line">        &quot;Name&quot;: &quot;tomcatwebapp&quot;,</span><br><span class="line">        &quot;Options&quot;: &#123;&#125;,</span><br><span class="line">        &quot;Scope&quot;: &quot;local&quot;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br><span class="line">$ docker inspect tomcatwebapp       </span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;CreatedAt&quot;: &quot;2019-05-05T15:03:29+08:00&quot;,</span><br><span class="line">        &quot;Driver&quot;: &quot;local&quot;,</span><br><span class="line">        &quot;Labels&quot;: &#123;&#125;,</span><br><span class="line">        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/tomcatwebapp/_data&quot;,</span><br><span class="line">        &quot;Name&quot;: &quot;tomcatwebapp&quot;,</span><br><span class="line">        &quot;Options&quot;: &#123;&#125;,</span><br><span class="line">        &quot;Scope&quot;: &quot;local&quot;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>在用<code>docker run</code>命令的时候，使用<code>--mount</code>标记来将 数据卷挂载到容器里。在一次<code>docker run</code> 中可以挂载多个 数据卷。<br><strong>启动一个挂载数据卷的容器</strong>  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name tomcat -p 80:8080 --mount source=tomcatwebapp,target=/usr/soft/tomcat/apache-tomcat-7.0.93/webapps -d  tomcatcentos:7</span><br></pre></td></tr></table></figure>
+<p><code>--mount</code>标志将数据卷<code>tomcatwebapp</code>绑定到容器的<code>/usr/soft/tomcat/apache-tomcat-7.0.93/webapps</code>目录  </p>
+<p><strong>删除数据卷</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker volume rm tomcatwebapp</span><br></pre></td></tr></table></figure></p>
+<h2 id="挂载主机目录"><a href="#挂载主机目录" class="headerlink" title="挂载主机目录"></a>挂载主机目录</h2><p>使用<code>--mount</code>标记可以指定挂载一个本地主机的目录到容器中去。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name tomcat -p 80:8080 --mount type=bind,source=/src/webapp,target=/usr/soft/tomcat/apache-tomcat-7.0.93/webapps -d  tomcatcentos:7</span><br></pre></td></tr></table></figure></p>
+<p><code>--mount</code>标志将宿主机的的目录<code>/src/webapp</code>绑定到容器的<code>/usr/soft/tomcat/apache-tomcat-7.0.93/webapps</code>目录。本地目录的路径必须是绝对路径，现在使用<code>--mount</code> 参数时如果本地目录不存在，Docker 会报错。<br><strong>增加<code>readonly</code>指定为只读</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name tomcat -p 80:8080 --mount type=bind,source=/src/webapp,target=/usr/soft/tomcat/apache-tomcat-7.0.93/webapps readonly  -d  tomcatcentos:7</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -335,8 +348,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/23/docker安装/" rel="next" title="docker安装">
-                <i class="fa fa-chevron-left"></i> docker安装
+              <a href="/2019/04/30/docker镜像构建/" rel="next" title="docker镜像构建">
+                <i class="fa fa-chevron-left"></i> docker镜像构建
               </a>
             
           </div>
@@ -345,8 +358,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/04/25/docker入门/" rel="prev" title="docker入门">
-                docker入门 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/05/05/docker创建tomcat应用/" rel="prev" title="docker创建tomcat应用">
+                docker创建tomcat应用 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -470,7 +483,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker组件"><span class="nav-number">1.</span> <span class="nav-text">Docker组件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker客户端和服务器"><span class="nav-number">1.1.</span> <span class="nav-text">Docker客户端和服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker镜像（Image）"><span class="nav-number">1.2.</span> <span class="nav-text">Docker镜像（Image）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分层存储"><span class="nav-number">1.2.1.</span> <span class="nav-text">分层存储</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#容器（Container）"><span class="nav-number">1.3.</span> <span class="nav-text">容器（Container）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#仓库（Registry）"><span class="nav-number">1.4.</span> <span class="nav-text">仓库（Registry）</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据管理"><span class="nav-number">1.</span> <span class="nav-text">数据管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据卷"><span class="nav-number">1.1.</span> <span class="nav-text">数据卷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#挂载主机目录"><span class="nav-number">1.2.</span> <span class="nav-text">挂载主机目录</span></a></li></ol></li></ol></div>
             
 
           </div>

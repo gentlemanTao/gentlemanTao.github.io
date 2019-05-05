@@ -232,6 +232,275 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/05/docker创建tomcat应用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="gentlema">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gentleman">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/05/docker创建tomcat应用/" itemprop="url">docker创建tomcat应用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-05T17:56:14+08:00">
+                2019-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ul>
+<li>jdk版本：1.8.201</li>
+<li>tocmat版本:7.0.93</li>
+<li>mysql:在其他单独的机器中(数据库或其他需要存储的东西尽量不要放在docker中)<h1 id="创建镜像"><a href="#创建镜像" class="headerlink" title="创建镜像"></a>创建镜像</h1><h2 id="创建jdk镜像"><a href="#创建jdk镜像" class="headerlink" title="创建jdk镜像"></a>创建jdk镜像</h2><strong>jdk镜像Dockerfile</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FROM centos:7</span><br><span class="line">#复制jdk并解压</span><br><span class="line">ADD jdk-8u201-linux-x64.tar.gz  /usr/soft/jdk/</span><br><span class="line">#设置环境变量</span><br><span class="line">ENV JAVA_HOME=/usr/soft/jdk/jdk1.8.0_201 </span><br><span class="line">ENV CLASSPATH=$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br><span class="line">ENV PATH=$PATH:$JAVA_HOME/bin</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>构建jdkcentos</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  docker build -t=jdkcentos:8 .</span><br></pre></td></tr></table></figure></p>
+<h2 id="创建tomcat数据卷"><a href="#创建tomcat数据卷" class="headerlink" title="创建tomcat数据卷"></a>创建tomcat数据卷</h2><p><strong>创建toncat数据卷，用来存放web应用</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker volume create tomcatwebapp</span><br></pre></td></tr></table></figure></p>
+<p>将数据卷创建好之后，查看数据卷所在位置<br><strong>查看数据卷信息</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$docker inspect tomcatwebapp</span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;CreatedAt&quot;: &quot;2019-05-05T15:03:29+08:00&quot;,</span><br><span class="line">        &quot;Driver&quot;: &quot;local&quot;,</span><br><span class="line">        &quot;Labels&quot;: &#123;&#125;,</span><br><span class="line">        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/tomcatwebapp/_data&quot;,</span><br><span class="line">        &quot;Name&quot;: &quot;tomcatwebapp&quot;,</span><br><span class="line">        &quot;Options&quot;: &#123;&#125;,</span><br><span class="line">        &quot;Scope&quot;: &quot;local&quot;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>从结果中可以看到数据卷对应宿主机的位置是：<code>/var/lib/docker/volumes/tomcatwebapp/_data</code>，将war包放到此目录下</p>
+<h2 id="创建tomcat镜像"><a href="#创建tomcat镜像" class="headerlink" title="创建tomcat镜像"></a>创建tomcat镜像</h2><p><strong>tomcat镜像Dockerfile</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">FROM jdkcentos:8</span><br><span class="line">ADD  apache-tomcat-7.0.93.tar.gz  /usr/soft/tomcat</span><br><span class="line">#公开端口</span><br><span class="line">EXPOSE 8080</span><br><span class="line">#设置启动命令</span><br><span class="line">ENTRYPOINT [&quot;/usr/soft/tomcat/apache-tomcat-7.0.93/bin/catalina.sh&quot;,&quot;run&quot;]</span><br></pre></td></tr></table></figure></p>
+<h1 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h1><p>启动容器时，使用<code>-d</code>标志将容器 设置为守护进程，将宿主机的80端口映射与容器的8080端口，并使用<code>--mount</code>标志将数据卷<code>tomcatwebapp</code>绑定到容器的<code>/usr/soft/tomcat/apache-tomcat-7.0.93/webapps</code>目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name tomcat -p 80:8080 --mount source=tomcatwebapp,target=/usr/soft/tomcat/apache-tomcat-7.0.93/webapps -d  tomcatcentos:7</span><br></pre></td></tr></table></figure></p>
+<p>在宿主机浏览器中打开；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.13.104/cms</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/05/docker数据管理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="gentlema">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gentleman">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/05/docker数据管理/" itemprop="url">docker数据管理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-05T17:55:09+08:00">
+                2019-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="数据管理"><a href="#数据管理" class="headerlink" title="数据管理"></a>数据管理</h1><p>docker使用数据卷和挂载主机目录来让容器使用主机的文件目录。数据卷需要提前创建，文件目录是确定的。挂载主机目录可以挂在多个主机目录，源路径必须使用宿主机的绝对路径。</p>
+<h2 id="数据卷"><a href="#数据卷" class="headerlink" title="数据卷"></a>数据卷</h2><p>&emsp;&emsp;<code>数据卷</code> 是被设计用来持久化数据的，它的生命周期独立于容器<code>，Docker</code>不会在容器被删除后自动删除 数据卷，并且也不存在垃圾回收这样的机制来处理没有任何容器引用的 数据卷。如果需要在删除容器的同时移除数据卷。可以在删除容器的时候使用<code>docker rm -v</code>这个命令。</p>
+<ul>
+<li><code>数据卷</code>是一个可供一个或多个容器使用的特殊目录，它绕过 UFS，可以提供很多有用的特性。</li>
+<li><code>数据卷</code>可以在容器之间共享和重用。</li>
+<li>对<code>数据卷</code>的修改会立马生效</li>
+<li>对<code>数据卷</code>的更新，不会影响镜像</li>
+<li><code>数据卷</code>默认会一直存在，即使容器被删除</li>
+</ul>
+<p><strong>创建数据卷</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker volume tomcatwebapp</span><br></pre></td></tr></table></figure></p>
+<p><strong>查看所有的数据卷</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker volume ls</span><br><span class="line">local    tomcatwebapp</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用<code>docker volume inspect</code>或<code>docker  inspect</code>查看指定数据卷的信息</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">$ docker volume inspect tomcatwebapp</span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;CreatedAt&quot;: &quot;2019-05-05T15:03:29+08:00&quot;,</span><br><span class="line">        &quot;Driver&quot;: &quot;local&quot;,</span><br><span class="line">        &quot;Labels&quot;: &#123;&#125;,</span><br><span class="line">        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/tomcatwebapp/_data&quot;,</span><br><span class="line">        &quot;Name&quot;: &quot;tomcatwebapp&quot;,</span><br><span class="line">        &quot;Options&quot;: &#123;&#125;,</span><br><span class="line">        &quot;Scope&quot;: &quot;local&quot;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br><span class="line">$ docker inspect tomcatwebapp       </span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;CreatedAt&quot;: &quot;2019-05-05T15:03:29+08:00&quot;,</span><br><span class="line">        &quot;Driver&quot;: &quot;local&quot;,</span><br><span class="line">        &quot;Labels&quot;: &#123;&#125;,</span><br><span class="line">        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/tomcatwebapp/_data&quot;,</span><br><span class="line">        &quot;Name&quot;: &quot;tomcatwebapp&quot;,</span><br><span class="line">        &quot;Options&quot;: &#123;&#125;,</span><br><span class="line">        &quot;Scope&quot;: &quot;local&quot;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>在用<code>docker run</code>命令的时候，使用<code>--mount</code>标记来将 数据卷挂载到容器里。在一次<code>docker run</code> 中可以挂载多个 数据卷。<br><strong>启动一个挂载数据卷的容器</strong>  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name tomcat -p 80:8080 --mount source=tomcatwebapp,target=/usr/soft/tomcat/apache-tomcat-7.0.93/webapps -d  tomcatcentos:7</span><br></pre></td></tr></table></figure>
+<p><code>--mount</code>标志将数据卷<code>tomcatwebapp</code>绑定到容器的<code>/usr/soft/tomcat/apache-tomcat-7.0.93/webapps</code>目录  </p>
+<p><strong>删除数据卷</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker volume rm tomcatwebapp</span><br></pre></td></tr></table></figure></p>
+<h2 id="挂载主机目录"><a href="#挂载主机目录" class="headerlink" title="挂载主机目录"></a>挂载主机目录</h2><p>使用<code>--mount</code>标记可以指定挂载一个本地主机的目录到容器中去。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name tomcat -p 80:8080 --mount type=bind,source=/src/webapp,target=/usr/soft/tomcat/apache-tomcat-7.0.93/webapps -d  tomcatcentos:7</span><br></pre></td></tr></table></figure></p>
+<p><code>--mount</code>标志将宿主机的的目录<code>/src/webapp</code>绑定到容器的<code>/usr/soft/tomcat/apache-tomcat-7.0.93/webapps</code>目录。本地目录的路径必须是绝对路径，现在使用<code>--mount</code> 参数时如果本地目录不存在，Docker 会报错。<br><strong>增加<code>readonly</code>指定为只读</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name tomcat -p 80:8080 --mount type=bind,source=/src/webapp,target=/usr/soft/tomcat/apache-tomcat-7.0.93/webapps readonly  -d  tomcatcentos:7</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/30/docker镜像构建/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -923,7 +1192,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
