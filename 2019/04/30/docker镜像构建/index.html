@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="镜像概念&amp;emsp;&amp;emsp;docker镜像是由文件系统叠加而成。最底端是一个引导文件系统，即bootfs（类似于linux/Unix的引导文件系统）。当一个容器启动后，容器会被移到内存中，而引导文件系统会被卸载，以留出更多的内存供initrd磁盘镜像使用。docker第二层是root文件系统rootfs（是一种或多种操作系统：centos，ubuntu等。）docker的文件系统的都是只读的">
+<meta name="description" content="镜像概念">
 <meta name="keywords" content="docker">
 <meta property="og:type" content="article">
 <meta property="og:title" content="docker镜像构建">
 <meta property="og:url" content="http://yoursite.com/2019/04/30/docker镜像构建/index.html">
 <meta property="og:site_name" content="Gentleman">
-<meta property="og:description" content="镜像概念&amp;emsp;&amp;emsp;docker镜像是由文件系统叠加而成。最底端是一个引导文件系统，即bootfs（类似于linux/Unix的引导文件系统）。当一个容器启动后，容器会被移到内存中，而引导文件系统会被卸载，以留出更多的内存供initrd磁盘镜像使用。docker第二层是root文件系统rootfs（是一种或多种操作系统：centos，ubuntu等。）docker的文件系统的都是只读的">
+<meta property="og:description" content="镜像概念">
 <meta property="og:locale" content="java">
-<meta property="og:updated_time" content="2019-04-30T06:26:33.099Z">
+<meta property="og:updated_time" content="2019-05-08T12:42:55.543Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker镜像构建">
-<meta name="twitter:description" content="镜像概念&amp;emsp;&amp;emsp;docker镜像是由文件系统叠加而成。最底端是一个引导文件系统，即bootfs（类似于linux/Unix的引导文件系统）。当一个容器启动后，容器会被移到内存中，而引导文件系统会被卸载，以留出更多的内存供initrd磁盘镜像使用。docker第二层是root文件系统rootfs（是一种或多种操作系统：centos，ubuntu等。）docker的文件系统的都是只读的">
+<meta name="twitter:description" content="镜像概念">
 
 
 
@@ -300,7 +300,8 @@
       
 
       
-        <h1 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>&emsp;&emsp;<code>docker</code>镜像是由文件系统叠加而成。最底端是一个引导文件系统，即<code>bootfs</code>（类似于<code>linux/Unix</code>的引导文件系统）。当一个容器启动后，容器会被移到内存中，而引导文件系统会被卸载，以留出更多的内存供initrd磁盘镜像使用。<code>docker</code>第二层是root文件系统rootfs（是一种或多种操作系统：<code>centos</code>，<code>ubuntu</code>等。）<code>docker</code>的文件系统的都是只读的。<code>docker</code>采用联合加载技术在<code>rootfs</code>上加载更多的只读文件系统。<strong>联合加载是一次加载多个文件系统，但是在外面看起来只能看到一个文件系统。联合加载会将各层文件系统叠加到一起，这样最终的文件系统会包含所有的文件系统。</strong><br>&emsp;&emsp;<code>docker</code>的读写层初始是空的，当文件系统发生变化时，这些变化都会应用到这一层。<strong>当需要修改一个文件，这个文件首先会从该读写层下面的只读层复制到该读写层，该文件的只读版本依然存在，但是已经被读写层的只读副本隐藏，这种被称为写时复制。</strong></p>
+        <h1 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><a id="more"></a>
+<p>&emsp;&emsp;<code>docker</code>镜像是由文件系统叠加而成。最底端是一个引导文件系统，即<code>bootfs</code>（类似于<code>linux/Unix</code>的引导文件系统）。当一个容器启动后，容器会被移到内存中，而引导文件系统会被卸载，以留出更多的内存供initrd磁盘镜像使用。<code>docker</code>第二层是root文件系统rootfs（是一种或多种操作系统：<code>centos</code>，<code>ubuntu</code>等。）<code>docker</code>的文件系统的都是只读的。<code>docker</code>采用联合加载技术在<code>rootfs</code>上加载更多的只读文件系统。<strong>联合加载是一次加载多个文件系统，但是在外面看起来只能看到一个文件系统。联合加载会将各层文件系统叠加到一起，这样最终的文件系统会包含所有的文件系统。</strong><br>&emsp;&emsp;<code>docker</code>的读写层初始是空的，当文件系统发生变化时，这些变化都会应用到这一层。<strong>当需要修改一个文件，这个文件首先会从该读写层下面的只读层复制到该读写层，该文件的只读版本依然存在，但是已经被读写层的只读副本隐藏，这种被称为写时复制。</strong></p>
 <h2 id="使用commit创建镜像"><a href="#使用commit创建镜像" class="headerlink" title="使用commit创建镜像"></a>使用commit创建镜像</h2><p>&emsp;&emsp;使用<code>docker commit</code>创建镜像。首先创建一个容器，并在容器内进行修改，最后将容器提交为一个镜像。<br><strong>创建一个要进行修改的定制容器</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -i -t centos /bin/bash</span><br><span class="line">[root@8e19e9541a7b /]#</span><br></pre></td></tr></table></figure></p>
 <p><strong>安装nginx</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@8e19e9541a7b /]#  rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</span><br><span class="line">[root@8e19e9541a7b /]#  yum install -y nginx</span><br></pre></td></tr></table></figure></p>
 <p><strong>提交定制容器</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker commit 8e19e9541a7b nginx2</span><br></pre></td></tr></table></figure></p>
@@ -511,7 +512,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

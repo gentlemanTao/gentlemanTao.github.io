@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="jdk版本：1.8.201 tocmat版本:7.0.93 mysql:在其他单独的机器中(数据库或其他需要存储的东西尽量不要放在docker中)创建镜像创建jdk镜像jdk镜像Dockerfile1234567FROM centos:7#复制jdk并解压ADD jdk-8u201-linux-x64.tar.gz  /usr/soft/jdk/#设置环境变量ENV JAVA_HOME=/usr">
+<meta name="description" content="jdk版本：1.8.201 tocmat版本:7.0.93 mysql:在其他单独的机器中(数据库或其他需要存储的东西尽量不要放在docker中)">
 <meta name="keywords" content="docker">
 <meta property="og:type" content="article">
 <meta property="og:title" content="docker创建tomcat应用">
 <meta property="og:url" content="http://yoursite.com/2019/05/05/docker创建tomcat应用/index.html">
 <meta property="og:site_name" content="Gentleman">
-<meta property="og:description" content="jdk版本：1.8.201 tocmat版本:7.0.93 mysql:在其他单独的机器中(数据库或其他需要存储的东西尽量不要放在docker中)创建镜像创建jdk镜像jdk镜像Dockerfile1234567FROM centos:7#复制jdk并解压ADD jdk-8u201-linux-x64.tar.gz  /usr/soft/jdk/#设置环境变量ENV JAVA_HOME=/usr">
+<meta property="og:description" content="jdk版本：1.8.201 tocmat版本:7.0.93 mysql:在其他单独的机器中(数据库或其他需要存储的东西尽量不要放在docker中)">
 <meta property="og:locale" content="java">
-<meta property="og:updated_time" content="2019-05-05T09:58:27.680Z">
+<meta property="og:updated_time" content="2019-05-08T12:40:45.005Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker创建tomcat应用">
-<meta name="twitter:description" content="jdk版本：1.8.201 tocmat版本:7.0.93 mysql:在其他单独的机器中(数据库或其他需要存储的东西尽量不要放在docker中)创建镜像创建jdk镜像jdk镜像Dockerfile1234567FROM centos:7#复制jdk并解压ADD jdk-8u201-linux-x64.tar.gz  /usr/soft/jdk/#设置环境变量ENV JAVA_HOME=/usr">
+<meta name="twitter:description" content="jdk版本：1.8.201 tocmat版本:7.0.93 mysql:在其他单独的机器中(数据库或其他需要存储的东西尽量不要放在docker中)">
 
 
 
@@ -303,7 +303,8 @@
         <ul>
 <li>jdk版本：1.8.201</li>
 <li>tocmat版本:7.0.93</li>
-<li>mysql:在其他单独的机器中(数据库或其他需要存储的东西尽量不要放在docker中)<h1 id="创建镜像"><a href="#创建镜像" class="headerlink" title="创建镜像"></a>创建镜像</h1><h2 id="创建jdk镜像"><a href="#创建jdk镜像" class="headerlink" title="创建jdk镜像"></a>创建jdk镜像</h2><strong>jdk镜像Dockerfile</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FROM centos:7</span><br><span class="line">#复制jdk并解压</span><br><span class="line">ADD jdk-8u201-linux-x64.tar.gz  /usr/soft/jdk/</span><br><span class="line">#设置环境变量</span><br><span class="line">ENV JAVA_HOME=/usr/soft/jdk/jdk1.8.0_201 </span><br><span class="line">ENV CLASSPATH=$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br><span class="line">ENV PATH=$PATH:$JAVA_HOME/bin</span><br></pre></td></tr></table></figure>
+<li>mysql:在其他单独的机器中(数据库或其他需要存储的东西尽量不要放在docker中)<a id="more"></a>
+<h1 id="创建镜像"><a href="#创建镜像" class="headerlink" title="创建镜像"></a>创建镜像</h1><h2 id="创建jdk镜像"><a href="#创建jdk镜像" class="headerlink" title="创建jdk镜像"></a>创建jdk镜像</h2><strong>jdk镜像Dockerfile</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FROM centos:7</span><br><span class="line">#复制jdk并解压</span><br><span class="line">ADD jdk-8u201-linux-x64.tar.gz  /usr/soft/jdk/</span><br><span class="line">#设置环境变量</span><br><span class="line">ENV JAVA_HOME=/usr/soft/jdk/jdk1.8.0_201 </span><br><span class="line">ENV CLASSPATH=$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br><span class="line">ENV PATH=$PATH:$JAVA_HOME/bin</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p><strong>构建jdkcentos</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  docker build -t=jdkcentos:8 .</span><br></pre></td></tr></table></figure></p>
@@ -352,6 +353,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/08/docker容器网络通信/" rel="prev" title="docker容器网络通信">
+                docker容器网络通信 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -428,7 +433,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
